@@ -30,4 +30,5 @@ def v1(req):
             return render(req,'ui.html',{'str1':con})
         response = chat_session.send_message(x)
         con.append([x,response.text])
+        print(x)
     return render(req,'ui.html'{'str1':con})

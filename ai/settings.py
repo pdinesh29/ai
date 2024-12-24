@@ -26,8 +26,6 @@ SECRET_KEY = 'django-insecure-ywovqgv2b&%7hui=z$7cen*ps!tu30ac0i4yrp0g12vwk&mxvn
 DEBUG = True
 
 ALLOWED_HOSTS = ["aibot-f4mh.onrender.com","localhost","127.0.0.1",]
-
-
 # Application definition
 
 INSTALLED_APPS = [

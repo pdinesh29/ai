@@ -27,8 +27,11 @@ def v1(req):
         x=str(req.POST.get('inpu'))
         if(x=='clear'):
             con.clear()
-            return render(req,'ui.html',{'str1':con})
-        response = chat_session.send_message(x)
-        con.append([x,response.text])
-        print(x)
-    return render(req,'ui.html',{'str1':con})
+            return render(req,'ui.html',{'str1':con,})
+        if con and x==con[-1][0]:
+          return render(req,'ui.html',{'str1':con,})
+        else:
+          response = chat_session.send_message(x)
+          con.append([x,response.text])
+          print(x)
+    return render(req,'ui.html',{'str1':con,})

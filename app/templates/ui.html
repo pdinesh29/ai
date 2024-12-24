@@ -30,9 +30,10 @@
             box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
         }
         .gpt {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: fixed;
+            top: 100%;
+
+            /* transform: translate(); */
         }
         input[type="text"] {
             flex: 1;
@@ -77,26 +78,50 @@
         .head1{
             height:60px;
         }
+        .chatform{
+            position:fixed;
+        }
     </style>
+    <script>
+        window.onload = function () {
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        };
+    </script>
 </head>
 <body>
     <header class="head1">
         <h1>Ai Chat</h1>
     </header>
     <main>
-        <div class="para">
-        {% for i in str1 %}
-            <p class="user-message">{{ i.0 }}</p>
-            <p class="bot-response">{{ i.1 }}</p>
-        {% endfor %}
+        <div class="para" id="message-container">
+            {% for i in str1 %}
+                <p class="user-message" {% if forloop.last %}id="last-message"{% endif %}>
+                    {{ i.0 }}
+                </p>
+                <p class="bot-response" {% if forloop.last %}id="last-message"{% endif %}>
+                    {{ i.1 }}
+                </p>
+            {% endfor %}
         </div>
-    </main>
-    <form action="{% url 'v1' %}" method="POST">
-        {% csrf_token %}
-        <div class="gpt">
-            <input type="text" id="send" name="inpu" placeholder="Type your message..." required>
-            <input type="submit" value="Send">
-        </div>
-    </form>
+        <main>
+            <form action="{% url 'v1' %}" method="POST" class="chat form">
+                {% csrf_token %}
+                <div class="gpt">
+                    <input type="text" id="send" name="inpu" placeholder="Type your message..." required>
+                    <button type="submit">Send</button>
+                </div>
+            </form>
+        </main>        
+    <script>
+    // Scroll to the last message after page refresh
+window.addEventListener('load', function () {
+    const lastMessage = document.getElementById('last-message');
+    if (lastMessage) {
+        lastMessage.scrollIntoView({ behavior: 'smooth' });
+    }
+});
+
+    </script>
 </body>
 </html>

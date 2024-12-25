@@ -3,7 +3,7 @@ import os
 import google.generativeai as genai
 from .models import accounts
 genai.configure(api_key='AIzaSyA4Uk_W9B_mRiF-UoQr0qVO2xar_REDCkE')
-
+from django.contrib.sessions.models import Session
 # Create the model
 generation_config = {
   "temperature": 1,
@@ -27,9 +27,9 @@ def login(req):
        email1=req.POST.get('email')
        password1=req.POST.get('password')
        user_exists = accounts.objects.filter(email=email1,password=password1).exists()
-       print(email1,password1,user_exists)
        if user_exists:
-          return redirect('v1')
+          con=list(req.session.get('chat'))
+          return render(req,'ui.html',{'str1':con})
     return render(req,'login.html')
 def signup(req):
     if req.method=='POST':
@@ -37,11 +37,14 @@ def signup(req):
        user.name=req.POST.get('name')
        user.email=req.POST.get('email')
        user.password=req.POST.get('pass')
+       req.session['email']=user.email
+       req.session['password']=user.password
+       req.session['chat']=tuple()
        user.save()
        return redirect('login')
     return render(req,'signup.html')
-con=[]
 def v1(req):
+    con=list(req.session.get('chat'))
     if req.method=='POST':
         x=str(req.POST.get('inpu'))
         if(x=='clear'):
@@ -52,5 +55,6 @@ def v1(req):
         else:
           response = chat_session.send_message(x)
           con.append([x,response.text])
+          req.session['chat']=tuple(con)
           print(x)
     return render(req,'ui.html',{'str1':con,})

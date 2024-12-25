@@ -29,11 +29,37 @@
             padding: 1rem;
             box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
         }
-        .gpt {
+        .chat-input {
             position: fixed;
-            top: 100%;
-
-            /* transform: translate(); */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .chat-input button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            background-color: #0056b3;
         }
         input[type="text"] {
             flex: 1;
@@ -93,7 +119,6 @@
     <header class="head1">
         <h1>Ai Chat</h1>
     </header>
-    <main>
         <div class="para" id="message-container">
             {% for i in str1 %}
                 <p class="user-message" {% if forloop.last %}id="last-message"{% endif %}>
@@ -103,16 +128,15 @@
                     {{ i.1 }}
                 </p>
             {% endfor %}
+            </div>
         </div>
-        <main>
             <form action="{% url 'v1' %}" method="POST" class="chat form">
                 {% csrf_token %}
-                <div class="gpt">
+                <div class="chat-input">
                     <input type="text" id="send" name="inpu" placeholder="Type your message..." required>
                     <button type="submit">Send</button>
                 </div>
-            </form>
-        </main>        
+            </form>        
     <script>
     // Scroll to the last message after page refresh
 window.addEventListener('load', function () {

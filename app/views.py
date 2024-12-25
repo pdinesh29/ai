@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import os
 import google.generativeai as genai
+from .models import accounts
 genai.configure(api_key='AIzaSyA4Uk_W9B_mRiF-UoQr0qVO2xar_REDCkE')
 
 # Create the model
@@ -21,6 +22,24 @@ chat_session = model.start_chat(
   history=[
   ]
 )
+def login(req):
+    if req.method=='POST':
+       email1=req.POST.get('email')
+       password1=req.POST.get('password')
+       user_exists = accounts.objects.filter(email=email1,password=password1).exists()
+       print(email1,password1,user_exists)
+       if user_exists:
+          return redirect('v1')
+    return render(req,'login.html')
+def signup(req):
+    if req.method=='POST':
+       user=accounts()
+       user.name=req.POST.get('name')
+       user.email=req.POST.get('email')
+       user.password=req.POST.get('pass')
+       user.save()
+       return redirect('login')
+    return render(req,'signup.html')
 con=[]
 def v1(req):
     if req.method=='POST':
